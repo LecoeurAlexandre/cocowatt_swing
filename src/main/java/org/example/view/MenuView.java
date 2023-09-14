@@ -14,7 +14,6 @@ public class MenuView extends JDialog {
         setTitle("Menu");
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         titlePanel = new JPanel();
         title = new JLabel("Menu");
@@ -68,6 +67,6 @@ public class MenuView extends JDialog {
         add(buttonsPanel, BorderLayout.CENTER);
         setVisible(true);
         pack();
-
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
     }
 }

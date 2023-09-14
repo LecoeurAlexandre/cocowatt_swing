@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class StatDTO {
     private int drivers;
     private int travellers;
     private double electricPercentage;
     private int doneTrips;
     private int notDoneTrips;
-    private double km;
+    private int km;
     private int books;
 }

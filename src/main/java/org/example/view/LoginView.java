@@ -1,5 +1,10 @@
 package org.example.view;
 
+import org.example.dto.request.UserDTO;
+import org.example.dto.response.UserAuthResponseDTO;
+import org.example.service.LoginService;
+import org.example.util.TokenStorage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +14,8 @@ public class LoginView {
     private JFrame frame;
     private JPanel titlePanel, formPanel;
     private JLabel title, mailLabel, passwordLabel;
-    private JTextField mailText, passwordText;
+    private JTextField mailText;
+    private JPasswordField passwordText;
     private JButton validButton;
     public LoginView() {
         // création et paramétrage du frame
@@ -48,7 +54,7 @@ public class LoginView {
 
         c.gridy = 1;
         c.gridx = 1;
-        passwordText = new JTextField(15);
+        passwordText = new JPasswordField(15);
         formPanel.add(passwordText, c);
 
         c.gridy = 2;
@@ -57,10 +63,16 @@ public class LoginView {
         validButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MenuView menuView = new MenuView();
-                menuView.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                menuView.setVisible(true);
-                frame.dispose();
+                LoginService loginService = new LoginService();
+                UserAuthResponseDTO userAuthResponseDTO = loginService.login(new UserDTO(mailText.getText(), passwordText.getText()));
+                TokenStorage token = new TokenStorage();
+                token.setToken("Bearer " + userAuthResponseDTO.getToken());
+                if (userAuthResponseDTO.getToken()!= null) {
+                    MenuView menuView = new MenuView();
+                    menuView.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    menuView.setVisible(true);
+                    frame.dispose();
+                }
             }
         });
         formPanel.add(validButton, c);
@@ -69,7 +81,6 @@ public class LoginView {
         frame.add(formPanel, BorderLayout.CENTER);
         frame.setVisible(true);
         frame.pack();
-
     }
 }
 

@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.dto.response.StatDTO;
+import org.example.service.StatService;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,11 +16,12 @@ public class StatsView extends JDialog {
     private StatDTO data;
     private Border userBorder, userStatBorder, carBorder, tripBorder, bookBorder, userNumberBorder;
     public StatsView() {
-        data = getDatas();
+        StatService statService = new StatService();
+        data = statService.getStats();
+//        data = this.getDatas();
         setTitle("Statistiques");
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         //partie titre
         titlePanel = new JPanel();
@@ -135,13 +137,9 @@ public class StatsView extends JDialog {
 
         setVisible(true);
         pack();
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
     }
     private int calcAllUsers() {
         return Integer.parseInt(driverNumberLabel.getText()) + Integer.parseInt(travellerNumberLabel.getText());
-    }
-    private StatDTO getDatas() {
-        //A modifier
-        StatDTO data = new StatDTO(18, 55, 45.28, 255, 300, 2763.45, 155);
-        return data;
     }
 }

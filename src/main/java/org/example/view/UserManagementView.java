@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.dto.response.UserManagementResponseDTO;
+import org.example.dto.response.UsersListDTO;
 import org.example.service.UserService;
 
 import javax.swing.*;
@@ -17,9 +18,12 @@ public class UserManagementView extends JDialog {
     JTextField nameSearchText, idSearchText;
     JButton searchNameButton, searchIdButton, returnButton, deleteButton;
     JTable table;
+    DefaultTableModel model;
 
     public UserManagementView() {
         UserService userService = new UserService();
+        String[] columns = new String[] {"Id", "Prénom", "Nom", "Téléphone", "Email", "Admin"};
+        model = new DefaultTableModel(columns,0);
         setTitle("Gestion utilisateurs");
         setLayout(new GridBagLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -48,10 +52,21 @@ public class UserManagementView extends JDialog {
         searchNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<UserManagementResponseDTO> users = userService.getByLastName(nameSearchText.getText());
-                c.gridy = 2;
-                c.gridx = 0;
-                displayTableByLastName(users, c);
+                model.setRowCount(0);
+                table.setModel(model);
+                model.fireTableDataChanged();
+                UsersListDTO users = userService.getByLastName(nameSearchText.getText());
+                for (UserManagementResponseDTO user : users.getList()) {
+                    model.addRow(new Object[] {
+                            user.getId(),
+                            user.getFirstName(),
+                            user.getLastName(),
+                            user.getPhone(),
+                            user.getEmail(),
+                            user.isAdmin()
+                    });
+                }
+                nameSearchText.setText("");
             }
         });
         searchNamePanel.add(searchNameButton);
@@ -66,10 +81,18 @@ public class UserManagementView extends JDialog {
         searchIdButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                model.setRowCount(0);
+                table.setModel(model);
                 UserManagementResponseDTO user = userService.getById(Integer.parseInt(idSearchText.getText()));
-                c.gridy = 2;
-                c.gridx = 0;
-                displayTableById(user, c);
+                model.addRow(new Object[] {
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getPhone(),
+                        user.getEmail(),
+                        user.isAdmin()
+                });
+                idSearchText.setText("");
             }
         });
         searchIdPanel.add(searchIdButton);
@@ -78,7 +101,12 @@ public class UserManagementView extends JDialog {
 
 
         tablePanel = new JPanel();
-
+        table = new JTable(model);
+        table.setBounds(30, 40, 100, 100);
+        JScrollPane sp = new JScrollPane(table);
+        c.gridy = 2;
+        c.gridx = 0;
+        add(sp, c);
 
         c.gridy = 3;
         c.gridx = 0;
@@ -99,7 +127,9 @@ public class UserManagementView extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int idValue = (int) table.getValueAt(table.getSelectedRow(), 0);
-                // A CONTINUER
+                System.out.println(idValue);
+                userService.delete(idValue);
+                model.removeRow(table.getSelectedRow());
             }
         });
         returnPanel.add(deleteButton);
@@ -107,40 +137,6 @@ public class UserManagementView extends JDialog {
 
         setVisible(true);
         pack();
-
-    }
-    private void displayTableByLastName(List<UserManagementResponseDTO> users, GridBagConstraints c) {
-        String[] columns = new String[] {"Id", "Prénom", "Nom", "Téléphone", "Email", "Admin"};
-        DefaultTableModel model = new DefaultTableModel(columns,0);
-        table = new JTable(model);
-        for (UserManagementResponseDTO user : users) {
-            model.addRow(new Object[] {
-                    user.getId(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getPhone(),
-                    user.getEmail(),
-                    user.isAdmin()
-            });
-        }
-        table.setBounds(30, 40, 100, 100);
-        JScrollPane sp = new JScrollPane(table);
-        add(sp, c);
-    }
-    private void displayTableById(UserManagementResponseDTO user, GridBagConstraints c) {
-        String[] columns = new String[] {"Id", "Prénom", "Nom", "Téléphone", "Email", "Admin"};
-        DefaultTableModel model = new DefaultTableModel(columns,0);
-        table = new JTable(model);
-        model.addRow(new Object[] {
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone(),
-                user.getEmail(),
-                user.isAdmin()
-        });
-        table.setBounds(30, 40, 100, 100);
-        JScrollPane sp = new JScrollPane(table);
-        add(sp, c);
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
     }
 }

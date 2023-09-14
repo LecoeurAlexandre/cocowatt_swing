@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.dto.response.CommentDTO;
+import org.example.service.CommentService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +20,6 @@ public class ModerateView extends JDialog {
         setTitle("Modération");
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         titlePanel = new JPanel();
         title = new JLabel("Modérer les commentaires");
@@ -31,14 +31,14 @@ public class ModerateView extends JDialog {
         String[] columns = new String[] {"Id", "Contenu", "Auteur"};
         DefaultTableModel model = new DefaultTableModel(columns,0);
         table = new JTable(model);
-        // A RENDRE DYNAMIQUE
-        List<CommentDTO> comments = new ArrayList<>();
-        comments.add(new CommentDTO(1254, "Sale conducteur, conduite déplorable", 25));
+        // Récupération des commentaires
+        CommentService commentService = new CommentService();
+        List<CommentDTO> comments = commentService.getAllComments();
         for (CommentDTO comment: comments) {
             model.addRow(new Object[] {
                     comment.getId(),
-                    comment.getContent(),
-                    comment.getAuthorId(),
+                    comment.getComment(),
+                    comment.getId()
             });
         }
         table.setBounds(30, 40, 100, 100);
@@ -70,6 +70,6 @@ public class ModerateView extends JDialog {
 
         setVisible(true);
         pack();
-
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
     }
 }
