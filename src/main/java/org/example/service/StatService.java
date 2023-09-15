@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.dto.response.StatDTO;
-import org.example.dto.response.UserManagementResponseDTO;
 import org.example.util.RestClient;
 
 public class StatService {

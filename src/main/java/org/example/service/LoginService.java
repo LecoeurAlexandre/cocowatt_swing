@@ -2,7 +2,6 @@ package org.example.service;
 
 import org.example.dto.request.UserDTO;
 import org.example.dto.response.UserAuthResponseDTO;
-import org.example.dto.response.UserManagementResponseDTO;
 import org.example.util.RestClient;
 
 public class LoginService {

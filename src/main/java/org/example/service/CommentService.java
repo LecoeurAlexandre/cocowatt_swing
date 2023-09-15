@@ -1,8 +1,6 @@
 package org.example.service;
 
 import org.example.dto.response.CommentDTO;
-import org.example.dto.response.UserAuthResponseDTO;
-import org.example.dto.response.UserManagementResponseDTO;
 import org.example.util.RestClient;
 
 import java.util.List;

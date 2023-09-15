@@ -1,13 +1,8 @@
 package org.example.service;
 
-import org.example.dto.request.UserDTO;
-import org.example.dto.response.UserAuthResponseDTO;
 import org.example.dto.response.UserManagementResponseDTO;
 import org.example.dto.response.UsersListDTO;
 import org.example.util.RestClient;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 public class UserService {
     private RestClient _restClient;
