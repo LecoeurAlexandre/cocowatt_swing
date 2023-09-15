@@ -18,7 +18,6 @@ public class StatsView extends JDialog {
     public StatsView() {
         StatService statService = new StatService();
         data = statService.getStats();
-//        data = this.getDatas();
         setTitle("Statistiques");
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

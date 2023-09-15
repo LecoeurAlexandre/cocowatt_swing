@@ -1,9 +1,5 @@
 package org.example.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 
 public class TokenStorage {
     private static String token;
